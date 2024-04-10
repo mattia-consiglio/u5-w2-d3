@@ -3,11 +3,15 @@ package mattiaconsiglio.u5w2d3.services;
 import mattiaconsiglio.u5w2d3.entities.Author;
 import mattiaconsiglio.u5w2d3.exceptions.AuthorNotFoundException;
 import mattiaconsiglio.u5w2d3.exceptions.BadRequestException;
+import mattiaconsiglio.u5w2d3.payloads.AuthorPayload;
 import mattiaconsiglio.u5w2d3.repositories.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -16,8 +20,9 @@ public class AuthorService {
     private AuthorRepository ar;
 
 
-    public List<Author> getAuthors() {
-        return ar.findAll();
+    public Page<Author> getAuthors(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
+        return ar.findAll(pageable);
     }
 
     public Author addAuthor(Author author) {

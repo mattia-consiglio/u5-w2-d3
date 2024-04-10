@@ -1,4 +1,4 @@
-package mattiaconsiglio.u5w2d3.services;
+package mattiaconsiglio.u5w2d3.payloads;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

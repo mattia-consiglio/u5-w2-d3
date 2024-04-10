@@ -1,6 +1,7 @@
 package mattiaconsiglio.u5w2d3.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
+import mattiaconsiglio.u5w2d3.payloads.ErrorPayload;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

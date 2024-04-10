@@ -1,4 +1,4 @@
-package mattiaconsiglio.u5w2d3.exceptions;
+package mattiaconsiglio.u5w2d3.payloads;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

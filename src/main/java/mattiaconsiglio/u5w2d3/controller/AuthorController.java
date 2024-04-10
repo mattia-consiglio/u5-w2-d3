@@ -1,13 +1,13 @@
 package mattiaconsiglio.u5w2d3.controller;
 
 import mattiaconsiglio.u5w2d3.entities.Author;
-import mattiaconsiglio.u5w2d3.services.AuthorPayload;
+import mattiaconsiglio.u5w2d3.payloads.AuthorPayload;
 import mattiaconsiglio.u5w2d3.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -17,8 +17,8 @@ public class AuthorController {
     private AuthorService as;
 
     @GetMapping
-    public List<Author> getAuthors() {
-        return as.getAuthors();
+    public Page<Author> getAuthors(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return as.getAuthors(page, size);
     }
 
     @GetMapping("/{id}")

@@ -1,13 +1,13 @@
 package mattiaconsiglio.u5w2d3.controller;
 
 import mattiaconsiglio.u5w2d3.entities.BlogPost;
-import mattiaconsiglio.u5w2d3.services.BlogPostPayload;
+import mattiaconsiglio.u5w2d3.payloads.BlogPostPayload;
 import mattiaconsiglio.u5w2d3.services.BlogPostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,8 +18,8 @@ public class BlogPostController {
 
 
     @GetMapping
-    public List<BlogPost> getBlogPosts() {
-        return this.blogPostService.getBlogPosts();
+    public Page<BlogPost> getBlogPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return this.blogPostService.getBlogPosts(page, size);
     }
 
     @PostMapping
