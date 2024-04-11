@@ -3,7 +3,7 @@ package mattiaconsiglio.u5w2d3.services;
 import mattiaconsiglio.u5w2d3.entities.Author;
 import mattiaconsiglio.u5w2d3.entities.BlogPost;
 import mattiaconsiglio.u5w2d3.exceptions.BlogPostNotFoundException;
-import mattiaconsiglio.u5w2d3.payloads.BlogPostPayload;
+import mattiaconsiglio.u5w2d3.payloads.BlogPostDTO;
 import mattiaconsiglio.u5w2d3.repositories.BlogPostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,16 +21,11 @@ public class BlogPostService {
     @Autowired
     private AuthorService as;
 
-    public BlogPost addBlogPost(BlogPostPayload blogPost) {
-        Author author = as.getAuthor(blogPost.getAuthorId());
-        BlogPost newBlogPost = new BlogPost();
-        newBlogPost.setTitle(blogPost.getTitle());
-        newBlogPost.setContent(blogPost.getContent());
-        newBlogPost.setAuthor(author);
-        newBlogPost.setCategory(blogPost.getCategory());
-        newBlogPost.setReadingTime(blogPost.getReadingTime());
-        newBlogPost.setCover("https://picsum.photos/200/300");
-        return br.save(newBlogPost);
+    public BlogPost addBlogPost(BlogPostDTO blogPost) {
+        Author author = as.getAuthor(blogPost.authorId());
+
+        return br.save(new BlogPost(blogPost.category(), blogPost.title(), blogPost.content(), blogPost.readingTime(), author, "https://picsum.photos/200/300"))
+                ;
     }
 
     public BlogPost getBlogPost(UUID id) {
@@ -43,12 +38,12 @@ public class BlogPostService {
     }
 
 
-    public BlogPost updateBlogPost(UUID id, BlogPostPayload blogPost) {
+    public BlogPost updateBlogPost(UUID id, BlogPostDTO blogPost) {
         BlogPost b = this.getBlogPost(id);
-        b.setTitle(blogPost.getTitle());
-        b.setContent(blogPost.getContent());
-        b.setCategory(blogPost.getCategory());
-        b.setReadingTime(blogPost.getReadingTime());
+        b.setTitle(blogPost.title());
+        b.setContent(blogPost.content());
+        b.setCategory(blogPost.category());
+        b.setReadingTime(blogPost.readingTime());
         return br.save(b);
     }
 

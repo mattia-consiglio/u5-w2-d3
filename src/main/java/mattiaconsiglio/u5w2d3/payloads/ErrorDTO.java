@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ErrorPayload {
+public class ErrorDTO {
     private String message;
     private LocalDateTime timestamp;
 }

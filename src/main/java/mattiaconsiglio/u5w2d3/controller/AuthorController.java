@@ -1,11 +1,14 @@
 package mattiaconsiglio.u5w2d3.controller;
 
 import mattiaconsiglio.u5w2d3.entities.Author;
-import mattiaconsiglio.u5w2d3.payloads.AuthorPayload;
+import mattiaconsiglio.u5w2d3.exceptions.BadRequestException;
+import mattiaconsiglio.u5w2d3.payloads.AuthorDTO;
 import mattiaconsiglio.u5w2d3.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -28,12 +31,18 @@ public class AuthorController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Author addAuthor(@RequestBody Author author) {
-        return as.addAuthor(author);
+    public Author addAuthor(@RequestBody @Validated AuthorDTO author, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
+        return as.addAuthor(new Author(author.name(), author.surname(), author.email(), author.birthDate()));
     }
 
     @PutMapping("/{id}")
-    public Author updateAuthor(@PathVariable("id") UUID id, @RequestBody AuthorPayload author) {
+    public Author updateAuthor(@PathVariable("id") UUID id, @RequestBody @Validated AuthorDTO author, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
         return as.updateAuthor(id, author);
     }
 

@@ -1,11 +1,14 @@
 package mattiaconsiglio.u5w2d3.controller;
 
 import mattiaconsiglio.u5w2d3.entities.BlogPost;
-import mattiaconsiglio.u5w2d3.payloads.BlogPostPayload;
+import mattiaconsiglio.u5w2d3.exceptions.BadRequestException;
+import mattiaconsiglio.u5w2d3.payloads.BlogPostDTO;
 import mattiaconsiglio.u5w2d3.services.BlogPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -24,7 +27,10 @@ public class BlogPostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BlogPost addBlogPost(@RequestBody BlogPostPayload blogPost) {
+    public BlogPost addBlogPost(@RequestBody @Validated BlogPostDTO blogPost, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
         return this.blogPostService.addBlogPost(blogPost);
     }
 
@@ -34,7 +40,10 @@ public class BlogPostController {
     }
 
     @PutMapping("/{id}")
-    public BlogPost updateBlogPost(@PathVariable("id") UUID id, @RequestBody BlogPostPayload blogPost) {
+    public BlogPost updateBlogPost(@PathVariable("id") UUID id, @RequestBody @Validated BlogPostDTO blogPost, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestException(validation.getAllErrors());
+        }
         return this.blogPostService.updateBlogPost(id, blogPost);
     }
 

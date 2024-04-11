@@ -3,7 +3,7 @@ package mattiaconsiglio.u5w2d3.services;
 import mattiaconsiglio.u5w2d3.entities.Author;
 import mattiaconsiglio.u5w2d3.exceptions.AuthorNotFoundException;
 import mattiaconsiglio.u5w2d3.exceptions.BadRequestException;
-import mattiaconsiglio.u5w2d3.payloads.AuthorPayload;
+import mattiaconsiglio.u5w2d3.payloads.AuthorDTO;
 import mattiaconsiglio.u5w2d3.repositories.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,12 +37,12 @@ public class AuthorService {
         return ar.findById(id).orElseThrow(() -> new AuthorNotFoundException(id));
     }
 
-    public Author updateAuthor(UUID id, AuthorPayload author) {
+    public Author updateAuthor(UUID id, AuthorDTO author) {
         Author a = this.getAuthor(id);
-        a.setName(author.getName());
-        a.setSurname(author.getSurname());
-        a.setEmail(author.getEmail());
-        a.setBirthDate(author.getBirthDate());
+        a.setName(author.name());
+        a.setSurname(author.surname());
+        a.setEmail(author.email());
+        a.setBirthDate(author.birthDate());
         a.generateAvatar();
         return ar.save(a);
     }

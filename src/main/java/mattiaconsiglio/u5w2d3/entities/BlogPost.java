@@ -26,10 +26,12 @@ public class BlogPost {
     @JoinColumn(name = "author_id")
     private Author author;
 
-    public BlogPost(String category, String title, String content, int readingTime) {
+    public BlogPost(String category, String title, String content, int readingTime, Author author, String cover) {
         this.category = category;
         this.title = title;
         this.content = content;
         this.readingTime = readingTime;
+        this.author = author;
+        this.cover = cover;
     }
 }
