@@ -1,5 +1,7 @@
 package mattiaconsiglio.u5w2d3.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import mattiaconsiglio.u5w2d3.entities.Author;
 import mattiaconsiglio.u5w2d3.exceptions.AuthorNotFoundException;
 import mattiaconsiglio.u5w2d3.exceptions.BadRequestException;
@@ -11,7 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @Service
@@ -19,6 +23,8 @@ public class AuthorService {
     @Autowired
     private AuthorRepository ar;
 
+    @Autowired
+    private Cloudinary cloudinary;
 
     public Page<Author> getAuthors(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
@@ -53,4 +59,10 @@ public class AuthorService {
     }
 
 
+    public Author uploadImage(UUID id, MultipartFile file) throws IOException {
+        Author a = this.getAuthor(id);
+        String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        a.setAvatar(url);
+        return ar.save(a);
+    }
 }

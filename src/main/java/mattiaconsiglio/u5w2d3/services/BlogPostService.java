@@ -1,5 +1,7 @@
 package mattiaconsiglio.u5w2d3.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import mattiaconsiglio.u5w2d3.entities.Author;
 import mattiaconsiglio.u5w2d3.entities.BlogPost;
 import mattiaconsiglio.u5w2d3.exceptions.BlogPostNotFoundException;
@@ -11,7 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @Service
@@ -20,6 +24,9 @@ public class BlogPostService {
     private BlogPostRepository br;
     @Autowired
     private AuthorService as;
+
+    @Autowired
+    private Cloudinary cloudinary;
 
     public BlogPost addBlogPost(BlogPostDTO blogPost) {
         Author author = as.getAuthor(blogPost.authorId());
@@ -50,5 +57,14 @@ public class BlogPostService {
     public void deleteBlogPost(UUID id) {
         this.getBlogPost(id);
         br.deleteById(id);
+    }
+
+
+    public BlogPost updateBlogPostCover(UUID id, MultipartFile file) throws IOException {
+        BlogPost b = this.getBlogPost(id);
+        file.getContentType();
+        String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        b.setCover(url);
+        return br.save(b);
     }
 }

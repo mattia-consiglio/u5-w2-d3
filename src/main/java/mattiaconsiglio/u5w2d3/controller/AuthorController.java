@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -50,5 +52,10 @@ public class AuthorController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAuthor(@PathVariable("id") UUID id) {
         as.deleteAuthor(id);
+    }
+
+    @PostMapping("/{id}/avatar")
+    public Author uploadImage(@PathVariable("id") UUID id, @RequestParam("avatar") MultipartFile file) throws IOException {
+        return as.uploadImage(id, file);
     }
 }
